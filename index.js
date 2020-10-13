@@ -2,19 +2,24 @@ const express = require("express");
 
 const app = express();
 
+const cors = require('cors')
+
 // Database Connection
 
 require("dotenv/config");
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-const MongoClient = require('mongodb').MongoClient;
-const uri = process.env.DB_CONNECTION_STRING;
-const client = new MongoClient(uri, { useNewUrlParser: true });
-client.connect(err => {
-  const collection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  client.close();
-});
+mongoose.connect(process.env.DB_CONNECTION_STRING);
+
+mongoose.connection.once('open', () => {
+  console.log("Connected to the MongoDB")
+})
+
+
+// Allow CORS
+app.use(cors())
+
+
 
 const PORT = process.env.PORT || 5000;
 
